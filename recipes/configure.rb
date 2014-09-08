@@ -1,4 +1,4 @@
-include_recipe "deploy"
+include_recipe "deploy::rails-restart"
 
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
@@ -11,6 +11,8 @@ node[:deploy].each do |application, deploy|
     cookbook "secrets_yml"
     variables(:environment_variables => deploy[:environment], :rails_env => deploy[:rails_env])
 
+    notifies :run, "execute[restart Rails app #{application}]"
+    
     only_if do
       File.directory?("#{deploy[:deploy_to]}/shared/config/")
     end
