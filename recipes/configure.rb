@@ -6,7 +6,7 @@ node[:deploy].each do |application, deploy|
     mode 0660
     group deploy[:group]
     owner deploy[:user]
-    
+    cookbook "secrets_yml"
     variables(:environment_variables => deploy[:environment], :rails_env => deploy[:rails_env])
 
     notifies :run, "execute[restart Rails app #{application}]"
